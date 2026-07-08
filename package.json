@@ -1,0 +1,49 @@
+{
+    "name": "Inventory-Management-System",
+    "version": "1.0.0",
+    "main": "index.js",
+    "scripts": {
+        "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
+        "seed": "ts-node-dev --respawn --transpile-only prisma/seed.ts",
+        "build": "tsc",
+        "start": "node dist/app/index.js",
+        "start:prod": "node dist/index.js"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "devDependencies": {
+        "@types/bcrypt": "^5.0.2",
+        "@types/cookie-parser": "^1.4.7",
+        "@types/express": "^4.17.21",
+        "@types/jsonwebtoken": "^9.0.6",
+        "@types/multer": "^1.4.12",
+        "@types/node": "^22.0.0",
+        "@types/node-cron": "^3.0.11",
+        "@types/uuid": "^10.0.0",
+        "prisma": "^5.17.0",
+        "ts-node-dev": "^2.0.0",
+        "typescript": "^5.6.2"
+    },
+    "description": "",
+    "dependencies": {
+        "@prisma/client": "^5.20.0",
+        "@types/cors": "^2.8.17",
+        "axios": "^1.7.5",
+        "bcrypt": "^5.1.1",
+        "cloudinary": "^2.5.0",
+        "cookie-parser": "^1.4.6",
+        "cors": "^2.8.5",
+        "date-fns": "^3.6.0",
+        "dotenv": "^16.4.5",
+        "express": "^4.21.0",
+        "http-status": "^1.7.4",
+        "jsonwebtoken": "^9.0.2",
+        "multer": "^1.4.5-lts.1",
+        "node-cron": "^3.0.3",
+        "nodemailer": "^6.9.14",
+        "sslcommerz-lts": "^1.1.0",
+        "uuid": "^10.0.0",
+        "zod": "^3.23.8"
+    }
+}
