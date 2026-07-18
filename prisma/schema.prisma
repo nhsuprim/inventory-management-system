@@ -133,8 +133,7 @@ model Product {
   price            Float
   costPrice        Float         @default(0)
   taxRate          Float?        @default(0) // percentage, e.g. 5 = 5%
-  stockQty         Int           @default(0)
-  reorderThreshold Int           @default(5)
+  reorderThreshold Int?          @default(5)
   unit             String        @default("pcs")
   thumbnailImage   String        @default("")
   description      String?
@@ -181,6 +180,7 @@ model Variant {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  @@unique([productId, color])
   @@index([productId])
 }
 
@@ -193,6 +193,7 @@ model Size {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  @@unique([variantId, size])
   @@index([variantId])
 }
 

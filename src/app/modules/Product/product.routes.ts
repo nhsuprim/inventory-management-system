@@ -27,4 +27,19 @@ router.post(
     },
 );
 
+router.get("/", productControllers.getAllProducts);
+router.get("/:id", productControllers.getProductById);
+
+router.patch("/:id", fileUploader.upload.any(), (req, res, next) => {
+    try {
+        if (req.body.data) {
+            req.body = JSON.parse(req.body.data);
+        }
+
+        return productControllers.updateProduct(req, res, next);
+    } catch (error) {
+        next(error);
+    }
+});
+
 export const productRoutes = router;

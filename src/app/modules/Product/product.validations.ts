@@ -2,7 +2,6 @@ import { z } from "zod";
 
 export const createProduct = z.object({
     name: z.string().min(1, "Product name is required"),
-    categoryId: z.string().min(1, "Category ID is required"),
     sku: z.string().min(1, "SKU is required"),
     price: z.number().nonnegative("Price cannot be negative"),
     costPrice: z
@@ -20,6 +19,23 @@ export const createProduct = z.object({
         .optional(),
     unit: z.string().optional(),
     description: z.string().optional(),
+    categories: z.array(z.string()).nonempty(),
+
+    variants: z
+        .array(
+            z.object({
+                color: z.string(),
+
+                sizes: z.array(
+                    z.object({
+                        size: z.string(),
+
+                        stock: z.coerce.number(),
+                    }),
+                ),
+            }),
+        )
+        .nonempty(),
 });
 export const productValidation = {
     createProduct,
