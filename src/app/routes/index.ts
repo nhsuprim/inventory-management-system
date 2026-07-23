@@ -37,10 +37,6 @@ const moduleRoutes = [
         path: "/product",
         route: sizeRoutes,
     },
-    {
-        path: "/product",
-        route: sizeRoutes,
-    },
 
     {
         path: "/team",

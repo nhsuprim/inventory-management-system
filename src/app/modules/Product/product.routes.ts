@@ -2,6 +2,7 @@ import express, { Request, Response, NextFunction } from "express";
 import { productControllers } from "./product.controllers";
 import { fileUploader } from "../../helpers/fileUploaders";
 import { productValidation } from "./product.validations";
+import { IFile } from "../../interface/file";
 
 const router = express.Router();
 

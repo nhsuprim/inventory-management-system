@@ -9,10 +9,10 @@ export const createProduct = z.object({
         .nonnegative("Cost price cannot be negative")
         .optional(),
     taxRate: z.number().nonnegative("Tax rate cannot be negative").optional(),
-    stockQty: z
-        .number()
-        .nonnegative("Stock quantity cannot be negative")
-        .optional(),
+    // stockQty: z
+    //     .number()
+    //     .nonnegative("Stock quantity cannot be negative")
+    //     .optional(),
     reorderThreshold: z
         .number()
         .nonnegative("Reorder threshold cannot be negative")
@@ -24,11 +24,11 @@ export const createProduct = z.object({
     variants: z
         .array(
             z.object({
-                color: z.string(),
+                color: z.string().optional(),
 
                 sizes: z.array(
                     z.object({
-                        size: z.string(),
+                        size: z.string().optional(),
 
                         stock: z.coerce.number(),
                     }),

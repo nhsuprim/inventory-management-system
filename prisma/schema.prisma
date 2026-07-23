@@ -125,6 +125,9 @@ model Category {
 // ---------------------------
 // Product (FR-3.x)
 // ---------------------------
+// stock lives on Size (see below) — Product itself never stores a
+// quantity. reorderThreshold stays here (per your decision), applied
+// uniformly across all of a product's variants/sizes.
 
 model Product {
   id               String        @id @default(auto()) @map("_id") @db.ObjectId
@@ -144,9 +147,6 @@ model Product {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
-  invoiceItems     InvoiceItem[]
-  stockAdjustments StockAdjustment[]
 
   @@index([name])
 }
@@ -169,7 +169,8 @@ model ProductCategory {
 }
 
 // A color variant of a product (e.g. "Red"), each with its own images and
-// a set of sizes/stock.
+// a set of sizes/stock. "Simple" products (no real color/size choice) get
+// one auto-created Variant{color:"Default"} behind the scenes.
 model Variant {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   product   Product  @relation(fields: [productId], references: [id])
@@ -180,10 +181,14 @@ model Variant {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  // Prevents the same color being added twice to one product.
   @@unique([productId, color])
   @@index([productId])
 }
 
+// The actual stock-keeping unit. Every unit of stock in the whole system
+// lives here — single source of truth. Simple products get one
+// Size{size:"Default"}.
 model Size {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   variant   Variant  @relation(fields: [variantId], references: [id])
@@ -193,6 +198,10 @@ model Size {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  invoiceItems     InvoiceItem[]
+  stockAdjustments StockAdjustment[]
+
+  // Prevents the same size being added twice to one variant.
   @@unique([variantId, size])
   @@index([variantId])
 }
@@ -244,30 +253,38 @@ model Invoice {
   @@index([createdAt])
 }
 
+// References Size (not Product) — a sale is always of a specific
+// variant/size combination, and that's exactly where stock lives.
+// productName/variantColor/sizeLabel are snapshots taken at sale time,
+// so a later product/variant rename never changes a past invoice.
 model InvoiceItem {
-  id          String  @id @default(auto()) @map("_id") @db.ObjectId
-  invoiceId   String  @db.ObjectId
-  invoice     Invoice @relation(fields: [invoiceId], references: [id])
-  productId   String  @db.ObjectId
-  product     Product @relation(fields: [productId], references: [id])
-  productName String
-  quantity    Int
-  unitPrice   Float
-  taxRate     Float?  @default(0)
-  lineTotal   Float
+  id           String  @id @default(auto()) @map("_id") @db.ObjectId
+  invoiceId    String  @db.ObjectId
+  invoice      Invoice @relation(fields: [invoiceId], references: [id])
+  sizeId       String  @db.ObjectId
+  size         Size    @relation(fields: [sizeId], references: [id])
+  productName  String
+  variantColor String?
+  sizeLabel    String
+  quantity     Int
+  unitPrice    Float
+  taxRate      Float?  @default(0)
+  lineTotal    Float
 
   @@index([invoiceId])
-  @@index([productId])
+  @@index([sizeId])
 }
 
 // ---------------------------
 // Stock Adjustment / Audit Log (FR-4.x)
 // ---------------------------
+// References Size — every restock/damage/loss/correction targets one
+// specific variant/size, never the product as a whole.
 
 model StockAdjustment {
   id        String         @id @default(auto()) @map("_id") @db.ObjectId
-  productId String         @db.ObjectId
-  product   Product        @relation(fields: [productId], references: [id])
+  sizeId    String         @db.ObjectId
+  size      Size           @relation(fields: [sizeId], references: [id])
   userId    String         @db.ObjectId
   user      User           @relation(fields: [userId], references: [id])
   changeQty Int // positive = stock increase, negative = decrease
@@ -275,6 +292,6 @@ model StockAdjustment {
   reason    String
   createdAt DateTime       @default(now())
 
-  @@index([productId])
+  @@index([sizeId])
   @@index([createdAt])
 }

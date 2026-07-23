@@ -11,7 +11,6 @@ const addProducts = async (req: Request) => {
         price,
         costPrice,
         taxRate,
-        stockQty,
         reorderThreshold,
         unit,
         description,
@@ -21,10 +20,10 @@ const addProducts = async (req: Request) => {
 
     const files = req.files as IFile[];
 
-    // ✅ thumbnail file
     const thumbnailFile = files.find((file) => file.fieldname === "thumbnail");
 
-    // ✅ thumbnail upload
+    console.log("Thumbnail", thumbnailFile);
+
     let thumbnailImage = "";
 
     if (thumbnailFile) {
@@ -92,7 +91,6 @@ const addProducts = async (req: Request) => {
             price: Number(price),
             costPrice: Number(costPrice),
             taxRate: Number(taxRate) || 0,
-            stockQty: Number(stockQty),
             reorderThreshold: Number(reorderThreshold),
             unit,
             thumbnailImage: thumbnailImage,
@@ -109,14 +107,14 @@ const addProducts = async (req: Request) => {
 
             variants: {
                 create: variants.map((variant: any, index: number) => ({
-                    color: variant.color,
+                    color: variant.color || "default",
 
                     // ✅ each variant own images
-                    images: variantImageUrls[index],
+                    images: variantImageUrls[index] || [],
 
                     sizes: {
                         create: variant.sizes.map((size: any) => ({
-                            size: size.size,
+                            size: size.size || "default",
                             stock: parseInt(size.stock),
                         })),
                     },

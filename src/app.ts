@@ -11,11 +11,6 @@ app.use(cors());
 app.use(cookieParser());
 dotenv.config();
 
-//parser
-app.use(express.json());
-
-app.use(express.urlencoded({ extended: true }));
-
 app.get("/", (req: Request, res: Response) => {
     res.send({
         Message: "Inventory-Management-System server..",
@@ -23,6 +18,11 @@ app.get("/", (req: Request, res: Response) => {
 });
 
 app.use("/api/v1", router);
+
+//parser
+app.use(express.json());
+
+app.use(express.urlencoded({ extended: true }));
 
 app.use(globalErrorHandler);
 
