@@ -6,10 +6,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const user_routes_1 = require("../modules/User/user.routes");
 const auth_routes_1 = require("../modules/Auth/auth.routes");
-const captain_routes_1 = require("../modules/Captain/captain.routes");
-const player_routes_1 = require("../modules/Player/player.routes");
 const team_routes_1 = require("../modules/Team/team.routes");
 const admin_routes_1 = require("../modules/Admin/admin.routes");
+const category_routes_1 = require("../modules/Category/category.routes");
+const product_routes_1 = require("../modules/Product/product.routes");
+const varient_routes_1 = require("../modules/Product/Variant/varient.routes");
+const size_routes_1 = require("../modules/Product/Size/size.routes");
 const router = express_1.default.Router();
 const moduleRoutes = [
     {
@@ -21,12 +23,20 @@ const moduleRoutes = [
         route: auth_routes_1.AuthRoutes,
     },
     {
-        path: "/captain",
-        route: captain_routes_1.captainRoutes,
+        path: "/category",
+        route: category_routes_1.categoryRoutes,
     },
     {
-        path: "/player",
-        route: player_routes_1.playerRoutes,
+        path: "/product",
+        route: product_routes_1.productRoutes,
+    },
+    {
+        path: "/product",
+        route: varient_routes_1.variantRoutes,
+    },
+    {
+        path: "/product",
+        route: size_routes_1.sizeRoutes,
     },
     {
         path: "/team",

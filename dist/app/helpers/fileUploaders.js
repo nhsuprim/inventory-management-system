@@ -7,9 +7,9 @@ exports.fileUploader = void 0;
 const multer_1 = __importDefault(require("multer"));
 const cloudinary_1 = require("cloudinary");
 cloudinary_1.v2.config({
-    cloud_name: "dgak3ha1i",
-    api_key: "172911419654983",
-    api_secret: "8KCIwv6b63vh--oIHRbMjjfuejY",
+    cloud_name: "difd6lz4d",
+    api_key: "965448919254442",
+    api_secret: "tw1yCLzA9R8CrwFLzqVBppt0D6A",
 });
 const storage = multer_1.default.memoryStorage();
 const upload = (0, multer_1.default)({ storage: storage });

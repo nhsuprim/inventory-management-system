@@ -91,13 +91,13 @@ const createCaptain = async (req) => {
     return result;
 };
 const createPlayer = async (req) => {
-    const files = req.files;
     const existingUser = await prisma_1.default.user.findUnique({
         where: { email: req.body.player.email },
     });
     if (existingUser) {
         throw new ApiError_1.default(500, "Email already exists");
     }
+    const files = req.files;
     const imageUrls = [];
     if (files && files.length > 0) {
         for (const file of files) {
